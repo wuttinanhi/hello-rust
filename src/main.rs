@@ -27,5 +27,5 @@ pub fn change_str(str: &mut String) {
 
 pub fn change_str_v2(original: &mut String) {
     let str = original;
-    *str = str.replace("World", "Rust");
+    *str = str.replace("World", "from change_str_v2");
 }
