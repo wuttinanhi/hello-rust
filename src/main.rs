@@ -1,17 +1,17 @@
 fn main() {
     let mut x = String::from("Hello World!");
-
     change_str(&mut x);
-
     println!("{}", x);
-    println!("{}", &x);
-    println!("{}", &mut x);
+
+    let mut y = String::from("Hello World!");
+    change_str_v2(&mut y);
+    println!("{}", y);
 
     let add = |a: i32, b: i32| a + b;
 
     let mut result = 0;
 
-    for x in 1..5 {
+    for x in 1..=5 {
         print!("{}", x);
         result = add(result, x);
     }
@@ -22,5 +22,10 @@ fn main() {
 }
 
 pub fn change_str(str: &mut String) {
-    *str = (*str).replace("World", "Rust").to_string();
+    *str = str.replace("World", "Rust").to_string();
+}
+
+pub fn change_str_v2(original: &mut String) {
+    let str = original;
+    *str = str.replace("World", "Rust");
 }
