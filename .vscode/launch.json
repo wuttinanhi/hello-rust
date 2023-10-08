@@ -5,9 +5,9 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Debug executable 'hello-rust'",
             "type": "lldb",
             "request": "launch",
-            "name": "Debug executable 'hello-rust'",
             "cargo": {
                 "args": [
                     "build",
@@ -23,9 +23,9 @@
             "cwd": "${workspaceFolder}"
         },
         {
+            "name": "Debug unit tests in executable 'hello-rust'",
             "type": "lldb",
             "request": "launch",
-            "name": "Debug unit tests in executable 'hello-rust'",
             "cargo": {
                 "args": [
                     "test",
