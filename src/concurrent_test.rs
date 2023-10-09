@@ -1,7 +1,7 @@
 // atomic int on multiple threads demo
 
 use std::{
-    sync::{Arc, Mutex},
+    sync::{Arc, Mutex, RwLock},
     thread,
 };
 
@@ -25,14 +25,18 @@ pub fn atomic_way() {
     println!("atomic_way(): {:?}", *num.lock().unwrap());
 }
 
-pub fn race_condition_way() {
+// not work and bad practice
+pub fn will_race_condition_way() {
     let mut num = 0;
+
     let mut handles = vec![];
 
+    fn plus_num(num: &mut i64) {
+        *num += 1;
+    }
+
     for _ in 0..100 {
-        let handle = thread::spawn(move || {
-            num += 1;
-        });
+        let handle = thread::spawn(move || plus_num(&mut num));
 
         handles.push(handle);
     }
@@ -41,10 +45,32 @@ pub fn race_condition_way() {
         handle.join().unwrap();
     }
 
-    println!("The value of the integer variable is: {:?}", num);
+    println!("will_race_condition_way(): {:?}", num);
+}
+
+fn rwlock_way() {
+    let data = Arc::new(RwLock::new(0));
+
+    let mut handles = vec![];
+
+    for _ in 0..100 {
+        let data = Arc::clone(&data);
+        let handle = thread::spawn(move || {
+            let mut write_data = data.write().unwrap();
+            *write_data += 1;
+        });
+        handles.push(handle);
+    }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!("rwlock_way(): {}", *data.read().unwrap());
 }
 
 pub fn multitest() {
     atomic_way();
-    race_condition_way();
+    will_race_condition_way();
+    rwlock_way();
 }
